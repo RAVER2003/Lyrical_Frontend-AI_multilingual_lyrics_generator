@@ -3,13 +3,52 @@
 @tailwind utilities;
 
 :root {
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-  color: #e5eefc;
-  background: #07111f;
+  font-family: "Segoe UI", sans-serif;
+  color: #233648;
+  background: #eff6fb;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --app-bg: #eff6fb;
+  --ambient-primary: rgba(149, 200, 227, 0.4);
+  --ambient-secondary: rgba(191, 223, 241, 0.5);
+  --surface-raised: rgba(252, 254, 255, 0.92);
+  --surface-muted: rgba(235, 245, 251, 0.9);
+  --surface-soft: rgba(242, 249, 253, 0.84);
+  --input-bg: rgba(248, 252, 255, 0.96);
+  --text-primary: #233648;
+  --text-secondary: #557187;
+  --text-muted: #7d98ab;
+  --border-subtle: rgba(125, 168, 196, 0.22);
+  --border-strong: rgba(109, 156, 187, 0.38);
+  --button-primary: #6ea8c7;
+  --button-primary-hover: #5f99b8;
+  --button-primary-text: #f7fbfe;
+  --ring-color: rgba(110, 168, 199, 0.7);
+  --accent-soft: #83b7d3;
+}
+
+:root[data-theme="dark"] {
+  color: #f8fafc;
+  background: #0f172a;
+  --app-bg: #0f172a;
+  --ambient-primary: rgba(45, 212, 191, 0.16);
+  --ambient-secondary: rgba(125, 211, 252, 0.12);
+  --surface-raised: rgba(15, 23, 42, 0.88);
+  --surface-muted: rgba(30, 41, 59, 0.8);
+  --surface-soft: rgba(15, 23, 42, 0.72);
+  --input-bg: rgba(15, 23, 42, 0.92);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-subtle: rgba(148, 163, 184, 0.16);
+  --border-strong: rgba(148, 163, 184, 0.28);
+  --button-primary: #cbd5e1;
+  --button-primary-hover: #e2e8f0;
+  --button-primary-text: #0f172a;
+  --ring-color: rgba(148, 163, 184, 0.7);
+  --accent-soft: #cbd5e1;
 }
 
 * {
@@ -24,20 +63,23 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(34, 211, 238, 0.12), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(244, 114, 182, 0.1), transparent 28%),
-    #07111f;
+  background: var(--app-bg);
+  color: var(--text-primary);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body,
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
 button,
-input {
+input,
+textarea {
   border: 0;
 }
 
@@ -45,15 +87,53 @@ button {
   cursor: pointer;
 }
 
-input::placeholder {
-  color: #64748b;
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
 }
 
 #root {
   min-height: 100vh;
 }
 
+.panel-scroll {
+  scrollbar-gutter: stable;
+}
+
+.panel-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.panel-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(109, 156, 187, 0.34);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+}
+
+:root[data-theme="dark"] .panel-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 ::selection {
-  background: rgba(125, 211, 252, 0.35);
-  color: #f8fafc;
+  background: rgba(110, 168, 199, 0.28);
+  color: var(--text-primary);
 }

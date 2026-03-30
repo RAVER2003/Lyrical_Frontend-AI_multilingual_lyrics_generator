@@ -1,0 +1,19 @@
+Option 1
+Eyebrow: Rendered response
+Title: Your words, reframed with calm rhythm.
+Description: Click the action and the same writing appears here with a paced, line-by-line reveal for a more intentional reading experience.
+
+Option 2
+Eyebrow: Preview panel
+Title: See the draft return with presence.
+Description: The right side mirrors your text in a cleaner reading format, unfolding line by line like a thoughtful assistant response.
+
+Option 3
+Eyebrow: Output view
+Title: A softer way to read what you wrote.
+Description: Trigger the preview to let the text arrive gradually, helping longer writing feel composed, spacious, and easy to follow.
+
+Option 4
+Eyebrow: Live composition
+Title: From raw text to a graceful display.
+Description: This panel takes the same content and presents it with measured motion, turning dense notes into a more polished reading moment.
