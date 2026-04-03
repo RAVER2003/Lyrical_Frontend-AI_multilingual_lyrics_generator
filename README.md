@@ -10,6 +10,11 @@ This project currently includes:
 - shadcn-style UI primitives used in the current screens
 - a placeholder translation service ready to be replaced by a real backend/model call
 
+## Product Notes
+
+- Frontend requirements draft:
+  [FRONTEND_REQUIREMENTS.md](./FRONTEND_REQUIREMENTS.md)
+
 ## Tech Stack
 
 - React

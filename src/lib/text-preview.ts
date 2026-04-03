@@ -8,10 +8,10 @@ If this becomes something more later, that's fine.
 For now, let it simply arrive well.`
 
 export const rightPanelCopy = {
-  eyebrow: "Model output",
-  title: "Translated lyrics appear here with a steady reveal.",
+  eyebrow: "Translation output",
+  title: "Lyrically Translated Version",
   description:
-    "When you run the translation, the model response is revealed here line by line so longer output stays readable and focused.",
+    "The translated version of your song lyrics will appear here, preserving the flow and structure of the original.",
 }
 
 export function formatTextToLines(text: string) {
