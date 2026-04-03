@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Moon, SunMedium, LogOut, Info, ChevronDown } from "lucide-react";
+import { ChevronRight, Info, ChevronDown, ChevronLeft } from "lucide-react";
 
-import { useTheme } from "@/components/theme/theme-provider";
-import { useAuth } from "@/components/auth/auth-provider";
 import { Button } from "@/components/ui/button";
 
 import type { ChatRecord, EditingContext, VersionMetadata } from "@/components/workspace/types";
@@ -25,6 +23,7 @@ type RightSidebarProps = {
   isFetchingVersion: boolean;
   onDeleteHistory: () => void;
   isDeletingHistory: boolean;
+  onOpenAbout: () => void;
 };
 
 type Tab = "transliteration" | "versionHistory" | "editLyrics";
@@ -47,9 +46,8 @@ export function RightSidebar({
   isFetchingVersion,
   onDeleteHistory,
   isDeletingHistory,
+  onOpenAbout,
 }: RightSidebarProps) {
-  const { theme, toggleTheme } = useTheme();
-  const { logout } = useAuth();
   
   const [activeTab, setActiveTab] = useState<Tab>("transliteration");
   const [language, setLanguage] = useState("english");
@@ -97,20 +95,13 @@ export function RightSidebar({
             <div className="mb-3 flex items-center justify-between gap-3 px-1">
               <div className="flex items-center gap-3">
                 <button
-                  onClick={toggleTheme}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-secondary)] shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
-                  title="Toggle theme"
+                  onClick={onOpenAbout}
+                  className="flex h-11 px-4 items-center gap-2 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-secondary)] text-sm font-medium shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+                  title="About Lyrical"
                   type="button"
                 >
-                  {theme === "light" ? <Moon className="h-5 w-5" /> : <SunMedium className="h-5 w-5" />}
-                </button>
-                <button
-                  onClick={logout}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-secondary)] shadow-sm transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950 dark:hover:border-rose-900"
-                  title="Log out"
-                  type="button"
-                >
-                  <LogOut className="h-5 w-5" />
+                  <Info className="h-5 w-5" />
+                  <span>About</span>
                 </button>
               </div>
               <button

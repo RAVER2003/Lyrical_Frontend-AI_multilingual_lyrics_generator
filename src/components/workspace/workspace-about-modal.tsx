@@ -31,12 +31,10 @@ export function WorkspaceAboutModal({
               </div>
               <div className="space-y-3">
                 <h2 className="text-3xl font-semibold tracking-tight">
-                  Translation workspace with chat-bound context.
+                  Multilingual Lyrics Translator.
                 </h2>
                 <p className="max-w-lg text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-                  Each chat in the left panel can feed the center translation
-                  area, while the right panel holds chat-specific details and
-                  supporting context.
+                  Lyrical provides culturally-aware song lyrics translations, instant phonetic transliterations, and a complete version history of your edits—all securely managed within isolated workspaces.
                 </p>
               </div>
             </div>
@@ -44,6 +42,35 @@ export function WorkspaceAboutModal({
             <Button onClick={onClose} size="icon" type="button" variant="ghost">
               <X className="h-4 w-4" />
             </Button>
+          </div>
+        </div>
+
+        <div className="relative grid gap-4 px-7 py-6 sm:grid-cols-3">
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-4 shadow-[0_12px_28px_rgba(2,6,23,0.06)]">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              Translation
+            </p>
+            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
+              Preserve the structural flow and emotional weight of the original song dynamics.
+            </p>
+          </div>
+
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-4 shadow-[0_12px_28px_rgba(2,6,23,0.06)]">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              Transliteration
+            </p>
+            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
+              Read and pronounce lines intuitively matching phonetics of the target dialect.
+            </p>
+          </div>
+
+          <div className="rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-raised)] px-4 py-4 shadow-[0_12px_28px_rgba(2,6,23,0.06)]">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--text-muted)]">
+              Workspaces
+            </p>
+            <p className="mt-3 text-sm leading-7 text-[var(--text-secondary)]">
+              Every chat session manages its own distinct timeline and contextual metadata.
+            </p>
           </div>
         </div>
       </Card>

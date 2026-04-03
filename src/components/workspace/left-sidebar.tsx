@@ -1,4 +1,6 @@
-import { ChevronLeft, ChevronRight, PencilLine } from "lucide-react";
+import { ChevronLeft, ChevronRight, PencilLine, Moon, SunMedium, LogOut } from "lucide-react";
+import { useTheme } from "@/components/theme/theme-provider";
+import { useAuth } from "@/components/auth/auth-provider";
 
 import type {
   ChatRecord,
@@ -34,6 +36,9 @@ export function LeftSidebar({
   onCollapsedSelectChat,
   onNewChat,
 }: LeftSidebarProps) {
+  const { theme, toggleTheme } = useTheme();
+  const { logout } = useAuth();
+  
   const asideClassName = overlay
     ? "pointer-events-none absolute left-0 top-0 z-20 flex h-full w-0 items-start overflow-visible bg-transparent"
     : "flex h-[80dvh] max-h-[80dvh] min-h-0 w-full self-start overflow-hidden bg-transparent";
@@ -105,6 +110,25 @@ export function LeftSidebar({
                 </button>
               ))}
             </div>
+
+            <div className="mt-4 flex items-center justify-between border-t border-[var(--border-subtle)] pt-4 px-1">
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-2 rounded-xl text-sm font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
+                type="button"
+              >
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <SunMedium className="h-4 w-4" />}
+                <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
+              </button>
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 rounded-xl text-sm font-medium text-[var(--text-secondary)] transition hover:text-rose-500"
+                type="button"
+              >
+                <LogOut className="h-4 w-4" />
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
       ) : (
@@ -164,6 +188,7 @@ export function LeftSidebar({
                 </div>
               </>
             ) : null}
+
           </div>
         </div>
       )}

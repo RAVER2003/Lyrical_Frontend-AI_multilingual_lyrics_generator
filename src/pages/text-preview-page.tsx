@@ -510,6 +510,7 @@ export function TextPreviewPage() {
             isFetchingVersion={isFetchingVersion}
             onDeleteHistory={handleDeleteHistory}
             isDeletingHistory={isDeletingHistory}
+            onOpenAbout={() => setIsAboutOpen(true)}
             overlay={!isLargeScreen}
             railWidth={railWidth}
           />
