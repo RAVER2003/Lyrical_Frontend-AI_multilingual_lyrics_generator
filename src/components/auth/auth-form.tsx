@@ -186,27 +186,27 @@ export function AuthForm({ mode }: { mode: AuthMode }) {
         <div className="absolute -left-10 top-8 h-24 w-24 rounded-full bg-[var(--ambient-primary)] blur-3xl" />
         <div className="absolute -right-8 bottom-6 h-28 w-28 rounded-full bg-[var(--ambient-secondary)] blur-3xl" />
 
-        <Card className="relative w-full overflow-hidden rounded-[34px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] shadow-[0_30px_80px_rgba(2,6,23,0.18)]">
-          <div className="absolute inset-x-0 top-0 h-28 bg-[var(--auth-hero-bg)]" />
-          <div className="absolute right-6 top-6 rounded-full border border-[var(--auth-card-border)] bg-[var(--auth-icon-bg)] p-2 shadow-[0_10px_25px_rgba(2,6,23,0.12)]">
-            <Sparkles className="h-4 w-4 text-[var(--accent-strong)]" />
+        <Card className="relative w-full overflow-hidden rounded-[28px] sm:rounded-[34px] border border-[var(--auth-card-border)] bg-[var(--auth-card-bg)] shadow-[0_30px_80px_rgba(2,6,23,0.18)]">
+          <div className="absolute inset-x-0 top-0 h-24 sm:h-28 bg-[var(--auth-hero-bg)]" />
+          <div className="absolute right-5 sm:right-6 top-5 sm:top-6 rounded-full border border-[var(--auth-card-border)] bg-[var(--auth-icon-bg)] p-2 shadow-[0_10px_25px_rgba(2,6,23,0.12)]">
+            <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 text-[var(--accent-strong)]" />
           </div>
 
-          <CardHeader className="relative space-y-3 border-b border-[var(--border-subtle)] pb-6 pt-10 text-center">
-            <p className="text-sm font-medium uppercase tracking-[0.24em] text-[var(--accent-strong)]">
+          <CardHeader className="relative space-y-2 sm:space-y-3 border-b border-[var(--border-subtle)] pb-5 pt-8 sm:pb-6 sm:pt-10 text-center">
+            <p className="text-xs sm:text-sm font-medium uppercase tracking-[0.24em] text-[var(--accent-strong)]">
               Lyrical
             </p>
-            <CardTitle className="text-4xl tracking-tight">
+            <CardTitle className="text-3xl sm:text-4xl tracking-tight">
               {isLogin ? "Welcome back" : "Create account"}
             </CardTitle>
-            <p className="mx-auto max-w-xs text-sm leading-7 text-[var(--text-secondary)]">
+            <p className="mx-auto max-w-xs text-xs sm:text-sm leading-6 sm:leading-7 text-[var(--text-secondary)]">
               {isLogin
                 ? "Log in to continue to your workspace."
                 : "Sign up to get access to the application."}
             </p>
           </CardHeader>
 
-          <CardContent className="relative p-6 pt-6 sm:p-7 sm:pt-7">
+          <CardContent className="relative p-5 pt-5 sm:p-7 sm:pt-7">
             <form className="space-y-4" onSubmit={handleSubmit}>
               {!isLogin && (
                 <label className="block space-y-2">

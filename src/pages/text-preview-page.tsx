@@ -31,8 +31,8 @@ export function TextPreviewPage() {
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
   
   const [leftSidebarMode, setLeftSidebarMode] = useState<LeftSidebarMode>("chats");
-  const [isLeftOpen, setIsLeftOpen] = useState(true);
-  const [isLeftPanelVisible, setIsLeftPanelVisible] = useState(true);
+  const [isLeftOpen, setIsLeftOpen] = useState(isLargeScreen);
+  const [isLeftPanelVisible, setIsLeftPanelVisible] = useState(isLargeScreen);
   const [isRightOpen, setIsRightOpen] = useState(false);
   const [isRightPanelVisible, setIsRightPanelVisible] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);

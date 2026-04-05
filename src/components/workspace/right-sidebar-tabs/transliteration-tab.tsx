@@ -21,13 +21,13 @@ export function TransliterationTab({
   onTransliterate,
 }: TransliterationTabProps) {
   return (
-    <div className="flex h-full flex-col gap-4 rounded-[22px] border border-[var(--border-strong)] bg-transparent p-5 animate-in fade-in">
+    <div className="flex h-full flex-col gap-3 sm:gap-4 rounded-[20px] sm:rounded-[22px] border border-[var(--border-strong)] bg-transparent p-3 sm:p-5 animate-in fade-in">
       <div className="flex flex-col gap-2">
-        <label className="text-sm font-medium text-[var(--text-primary)]">Target Dialect</label>
+        <label className="text-xs sm:text-sm font-medium text-[var(--text-primary)]">Target Dialect</label>
         <div className="relative">
           <button
             onClick={() => setIsLangOpen(!isLangOpen)}
-            className="w-full appearance-none rounded-xl border border-[var(--border-strong)] bg-[var(--surface-raised)] pl-4 pr-10 py-3 text-left text-sm font-medium text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all hover:bg-[var(--surface-muted)] focus:border-[var(--ring-color)] focus:shadow-[var(--field-focus-shadow)] cursor-pointer"
+            className="w-full appearance-none rounded-xl border border-[var(--border-strong)] bg-[var(--surface-raised)] pl-3 sm:pl-4 pr-10 py-2 sm:py-3 text-left text-xs sm:text-sm font-medium text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all hover:bg-[var(--surface-muted)] focus:border-[var(--ring-color)] focus:shadow-[var(--field-focus-shadow)] cursor-pointer"
             type="button"
           >
             {language === "english" ? "English (Default)" : language === "marathi" ? "Marathi" : "Hindi"}
@@ -71,14 +71,14 @@ export function TransliterationTab({
       </div>
       
       <div className="flex flex-1 flex-col gap-2 min-h-0">
-        <label className="text-sm font-medium text-[var(--text-primary)]">Area for transliteration</label>
-        <div className="flex flex-1 items-center justify-center rounded-[16px] border border-dashed border-[var(--border-strong)] bg-[var(--surface-soft)] p-4 text-sm text-[var(--text-muted)] overflow-y-auto">
+        <label className="text-xs sm:text-sm font-medium text-[var(--text-primary)]">Area for transliteration</label>
+        <div className="flex flex-1 items-center justify-center rounded-[12px] sm:rounded-[16px] border border-dashed border-[var(--border-strong)] bg-[var(--surface-soft)] p-3 sm:p-4 text-xs sm:text-sm text-[var(--text-muted)] overflow-y-auto">
           Transliteration Preview Area
         </div>
       </div>
-      
+
       <Button 
-        className="mt-auto h-auto w-full shrink-0 rounded-xl py-3 text-[0.85rem] font-medium tracking-wide"
+        className="mt-auto h-auto w-full shrink-0 rounded-xl py-3 sm:py-4 text-[0.8rem] sm:text-[0.85rem] font-medium tracking-wide"
         disabled={!hasTranslatedLyrics || isTransliterating}
         onClick={() => onTransliterate(language)}
       >

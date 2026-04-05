@@ -73,21 +73,21 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
 
   return (
     <>
-      <section className="grid justify-items-center items-stretch gap-6 transition-[gap,transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] xl:grid-cols-[1fr_1fr] xl:gap-5">
+      <section className="grid justify-items-center items-stretch gap-4 sm:gap-6 transition-[gap,transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] xl:grid-cols-[1fr_1fr] xl:gap-5">
         <Card className="flex h-full min-h-0 w-full max-w-[38rem] flex-col xl:justify-self-center">
-          <CardHeader>
-            <p className="text-sm font-medium text-[var(--text-muted)]">
+          <CardHeader className="p-4 sm:p-6 pb-2 sm:pb-6">
+            <p className="text-xs sm:text-sm font-medium text-[var(--text-muted)]">
               {activeChat.title}
             </p>
-            <CardTitle>Original Lyrics</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-lg sm:text-xl">Original Lyrics</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">
               Write or paste the original song lyrics you want to translate here.
             </CardDescription>
           </CardHeader>
 
-          <CardContent className="flex min-h-0 flex-1 flex-col">
+          <CardContent className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 pt-0 sm:pt-0">
             <div
-              className={`flex flex-col rounded-[24px] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--input-bg),var(--surface-soft))] p-4 ${panelHeightClass}`}
+              className={`flex flex-col rounded-[20px] sm:rounded-[24px] border border-[var(--border-subtle)] bg-[linear-gradient(180deg,var(--input-bg),var(--surface-soft))] p-3 sm:p-4 ${panelHeightClass}`}
             >
               <div className="mb-3 flex items-center justify-between text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">
                 <span>Draft</span>
@@ -102,34 +102,35 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
               />
             </div>
 
-            <div className="mt-auto pt-5">
-              <div className="rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 py-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex min-w-0 flex-wrap items-center gap-2 text-sm text-[var(--text-secondary)]">
-                    <Badge>{wordCount} words</Badge>
+            <div className="mt-auto pt-4 sm:pt-5">
+              <div className="rounded-[16px] sm:rounded-[20px] border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-3 py-3 sm:px-4 sm:py-4">
+                <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-3 sm:gap-3">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2 text-xs sm:text-sm text-[var(--text-secondary)]">
+                    <Badge className="text-[0.65rem] sm:text-xs px-2 py-0.5">{wordCount} words</Badge>
                   </div>
 
-                  <div className="relative flex min-w-0 flex-wrap items-center justify-end gap-3 z-20">
+                  <div className="relative flex w-full sm:w-auto min-w-0 flex-wrap items-center justify-between sm:justify-end gap-2 sm:gap-3 z-20">
                     <Button
                       disabled={isBusy}
                       onClick={onClear}
                       size="sm"
                       type="button"
                       variant="ghost"
+                      className="px-2 sm:px-3 text-xs sm:text-sm h-8 sm:h-9"
                     >
                       Clear
                     </Button>
                     
-                    <div className="relative">
+                    <div className="relative flex-1 sm:flex-none">
                       <button
                         onClick={() => setIsLangOpen(!isLangOpen)}
-                        className="flex h-10 min-w-[140px] items-center justify-between appearance-none rounded-xl border border-[var(--border-strong)] bg-[var(--surface-raised)] px-4 text-sm font-medium text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all hover:bg-[var(--surface-muted)] focus:border-[var(--ring-color)] focus:shadow-[var(--field-focus-shadow)] cursor-pointer"
+                        className="flex h-9 sm:h-10 w-full min-w-0 sm:min-w-[140px] items-center justify-between appearance-none rounded-xl border border-[var(--border-strong)] bg-[var(--surface-raised)] px-3 sm:px-4 text-xs sm:text-sm font-medium text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all hover:bg-[var(--surface-muted)] focus:border-[var(--ring-color)] focus:shadow-[var(--field-focus-shadow)] cursor-pointer"
                         type="button"
                       >
                         <span className="truncate mr-2">
-                          {language === "english" ? "English (Default)" : language === "marathi" ? "Marathi" : "Hindi"}
+                          {language === "english" ? "English" : language === "marathi" ? "Marathi" : "Hindi"}
                         </span>
-                        <ChevronDown className={`h-4 w-4 shrink-0 px-0 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
+                        <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 shrink-0 px-0 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
                       </button>
                       
                       {isLangOpen && (
@@ -140,7 +141,7 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                           />
                           <div className="absolute z-[90] bottom-full mb-2 w-full flex flex-col gap-1 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_oklab,var(--surface-raised)_95%,white)] p-1.5 shadow-lg backdrop-blur-md dark:bg-[color-mix(in_oklab,var(--surface-raised)_95%,black)]">
                             {[
-                              { id: "english", label: "English (Default)" },
+                              { id: "english", label: "English" },
                               { id: "marathi", label: "Marathi" },
                               { id: "hindi", label: "Hindi" },
                             ].map((opt) => (
@@ -150,7 +151,7 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                                   setLanguage(opt.id);
                                   setIsLangOpen(false);
                                 }}
-                                className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+                                className={`w-full rounded-lg px-2 py-1.5 sm:px-3 sm:py-2 text-left text-xs sm:text-sm font-medium transition-colors ${
                                   language === opt.id 
                                     ? "[background:var(--button-primary)] text-[var(--button-primary-text)] shadow-sm" 
                                     : "text-[var(--text-primary)] hover:bg-[var(--surface-muted)]"
@@ -169,11 +170,13 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                       disabled={isBusy || !inputText.trim()}
                       onClick={onGenerate}
                       type="button"
+                      size="sm"
+                      className="flex-1 sm:flex-none h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm"
                     >
-                      <span>
-                        {isTranslating ? "Translating..." : "Translate lyrics"}
+                      <span className="truncate">
+                        {isTranslating ? "Translating..." : "Translate"}
                       </span>
-                      <ArrowRight className="h-4 w-4" />
+                      <ArrowRight className="ml-1 sm:ml-2 h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
                     </Button>
                   </div>
                 </div>
@@ -183,23 +186,23 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
         </Card>
 
         <Card className="flex h-full min-h-0 w-full max-w-[38rem] flex-col xl:justify-self-center">
-          <CardHeader className="flex-row items-start justify-between gap-4 space-y-0">
-            <div className="max-w-xl space-y-2">
-              <p className="text-sm font-medium text-[var(--text-muted)]">
+          <CardHeader className="flex-row items-start justify-between gap-4 space-y-0 p-4 sm:p-6 pb-2 sm:pb-6">
+            <div className="max-w-xl space-y-1 sm:space-y-2">
+              <p className="text-xs sm:text-sm font-medium text-[var(--text-muted)]">
                 {rightPanelEyebrow}
               </p>
-              <CardTitle>{rightPanelTitle}</CardTitle>
-              <CardDescription>{rightPanelDescription}</CardDescription>
+              <CardTitle className="text-lg sm:text-xl">{rightPanelTitle}</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">{rightPanelDescription}</CardDescription>
             </div>
 
-            <Badge variant="secondary">Model output</Badge>
+            <Badge variant="secondary" className="shrink-0 text-[0.65rem] sm:text-xs">Model output</Badge>
           </CardHeader>
 
-          <CardContent className="flex min-h-0 flex-1 flex-col">
+          <CardContent className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 pt-0 sm:pt-0">
             <div
               ref={previewScrollRef}
               onScroll={onPreviewScroll}
-              className={`panel-scroll overflow-y-auto rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-5 ${panelHeightClass}`}
+              className={`panel-scroll overflow-y-auto rounded-[20px] sm:rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 sm:p-5 ${panelHeightClass}`}
             >
               {isWaitingResponse ? (
                 <div className="flex h-full min-h-full flex-col justify-center rounded-[20px] border border-dashed border-[var(--border-subtle)] px-6">
@@ -294,8 +297,8 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
               )}
             </div>
 
-            <div className="mt-auto pt-5">
-              <div className="flex flex-col gap-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-4 py-3 text-sm text-[var(--text-secondary)]">
+            <div className="mt-auto pt-4 sm:pt-5">
+              <div className="flex flex-col gap-3 rounded-xl sm:rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-3 py-3 sm:px-4 text-xs sm:text-sm text-[var(--text-secondary)]">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <span>
                     {isWaitingResponse

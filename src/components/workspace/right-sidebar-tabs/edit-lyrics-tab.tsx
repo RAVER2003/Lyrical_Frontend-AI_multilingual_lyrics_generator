@@ -18,19 +18,19 @@ export function EditLyricsTab({
 }: EditLyricsTabProps) {
   return (
     <div className="flex h-full flex-col px-1 animate-in fade-in slide-in-from-right-2">
-       <div className="flex flex-1 flex-col justify-between rounded-[22px] border border-[var(--border-strong)] bg-[var(--surface-soft)] p-5 shadow-sm">
-         <div className="space-y-4">
-           <p className="text-[0.8rem] font-bold uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-subtle)] pb-2">
+       <div className="flex flex-1 flex-col justify-between rounded-[20px] sm:rounded-[22px] border border-[var(--border-strong)] bg-[var(--surface-soft)] p-4 sm:p-5 shadow-sm">
+         <div className="space-y-3 sm:space-y-4">
+           <p className="text-[0.7rem] sm:text-[0.8rem] font-bold uppercase tracking-widest text-[var(--text-muted)] border-b border-[var(--border-subtle)] pb-2">
              Edit View
            </p>
-           <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-sm text-[var(--text-primary)] leading-loose">
+           <div className="flex flex-wrap items-center gap-x-2 gap-y-3 text-xs sm:text-sm text-[var(--text-primary)] leading-loose">
              {editingContext.prevWords.split(" ").filter(Boolean).map((word: string, i: number) => (
                <span key={`prev-${i}`} className="cursor-not-allowed opacity-60">{word}</span>
              ))}
              
              <input 
                type="text" 
-               className="flex items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--input-bg)] px-2 py-1 text-center font-bold text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all focus:shadow-[var(--field-focus-shadow)] min-w-[80px]"
+               className="flex items-center justify-center rounded-lg border border-[var(--border-subtle)] bg-[var(--input-bg)] px-2 py-1 text-center font-bold text-[var(--text-primary)] shadow-[var(--field-shadow)] outline-none transition-all focus:shadow-[var(--field-focus-shadow)] min-w-[60px] sm:min-w-[80px]"
                value={editWordInput}
                onChange={(e) => setEditWordInput(e.target.value)}
              />
@@ -41,11 +41,11 @@ export function EditLyricsTab({
            </div>
          </div>
 
-         <div className="flex gap-3 pt-6 shrink-0 mt-auto">
-           <Button onClick={onCancelEdit} variant="outline" className="flex-1 rounded-full border border-[var(--border-strong)] bg-transparent">
+         <div className="flex gap-2 sm:gap-3 pt-4 sm:pt-6 shrink-0 mt-auto">
+           <Button onClick={onCancelEdit} variant="outline" className="flex-1 rounded-full border border-[var(--border-strong)] bg-transparent text-xs sm:text-sm h-8 sm:h-10">
              Cancel
            </Button>
-           <Button onClick={() => onConfirmEdit(editWordInput)} className="flex-1 rounded-full">
+           <Button onClick={() => onConfirmEdit(editWordInput)} className="flex-1 rounded-full text-xs sm:text-sm h-8 sm:h-10">
              Confirm
            </Button>
          </div>

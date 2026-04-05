@@ -86,23 +86,23 @@ export function RightSidebar({
         >
           <div
             className={[
-              "flex h-full min-h-full flex-col rounded-[28px] border p-4",
+              "flex h-full min-h-full flex-col rounded-[24px] sm:rounded-[28px] border p-3 sm:p-4",
               overlay
                 ? "border-[var(--border-subtle)] bg-[var(--surface-raised)] shadow-[0_18px_34px_rgba(15,23,42,0.14)]"
                 : "border-white/60 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--surface-soft)_94%,white),color-mix(in_oklab,var(--surface-raised)_90%,var(--ambient-secondary)))] shadow-[inset_0_1px_0_rgba(255,255,255,0.78),0_18px_34px_rgba(180,210,240,0.1)]",
             ].join(" ")}
           >
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-3 sm:mb-4 flex items-center justify-between">
               <button
-                className="flex items-center gap-2 rounded-xl bg-[var(--surface-raised)] px-4 py-2 text-sm font-bold text-[var(--text-secondary)] shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+                className="flex items-center gap-2 rounded-xl bg-[var(--surface-raised)] px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-bold text-[var(--text-secondary)] shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
                 onClick={onOpenAbout}
                 type="button"
               >
-                <Info className="h-4 w-4" />
+                <Info className="h-3 w-3 sm:h-4 sm:w-4" />
                 <span>About</span>
               </button>
               <button
-                className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--surface-raised)] text-[var(--text-secondary)] shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
+                className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-[var(--surface-raised)] text-[var(--text-secondary)] shadow-sm transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
                 onClick={onToggle}
                 type="button"
                 title="Close details"
@@ -113,9 +113,9 @@ export function RightSidebar({
 
             {/* <div className="mb-2 h-px w-full bg-[var(--border-subtle)]" /> */}
 
-            <nav className="relative mt-2 flex gap-1 border-b border-t border-[var(--border-subtle)] py-4">
+            <nav className="relative mt-1 sm:mt-2 flex gap-1 border-b border-t border-[var(--border-subtle)] py-3 sm:py-4">
               <div 
-                className="absolute bottom-4 left-0 top-4 rounded-full transition-all duration-300 ease-out [background:var(--button-primary)] shadow-[var(--button-primary-shadow)]"
+                className="absolute bottom-3 sm:bottom-4 left-0 top-3 sm:top-4 rounded-xl sm:rounded-full transition-all duration-300 ease-out [background:var(--button-primary)] shadow-[var(--button-primary-shadow)]"
                 style={{
                   width: editingContext ? 'calc((100% - 8px) / 3)' : 'calc((100% - 4px) / 2)',
                   transform: `translateX(${
@@ -127,7 +127,7 @@ export function RightSidebar({
               />
               <button
                 className={[
-                  "relative z-10 flex-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[0.7rem] font-semibold tracking-wide transition-colors duration-300",
+                  "relative z-10 flex-1 whitespace-nowrap rounded-xl sm:rounded-full px-1 sm:px-2 py-1.5 text-[0.65rem] sm:text-[0.7rem] font-semibold tracking-normal sm:tracking-wide transition-colors duration-300",
                   activeTab === "transliteration"
                     ? "text-[var(--button-primary-text)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]",
@@ -135,11 +135,12 @@ export function RightSidebar({
                 onClick={() => setActiveTab("transliteration")}
                 type="button"
               >
-                Transliteration
+                <span className="sm:hidden">Transliterate</span>
+                <span className="hidden sm:inline">Transliteration</span>
               </button>
               <button
                 className={[
-                  "relative z-10 flex-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[0.7rem] font-semibold tracking-wide transition-colors duration-300",
+                  "relative z-10 flex-1 whitespace-nowrap rounded-xl sm:rounded-full px-1 sm:px-2 py-1.5 text-[0.65rem] sm:text-[0.7rem] font-semibold tracking-normal sm:tracking-wide transition-colors duration-300",
                   activeTab === "versionHistory"
                     ? "text-[var(--button-primary-text)]"
                     : "text-[var(--text-muted)] hover:text-[var(--text-primary)]",
@@ -147,12 +148,13 @@ export function RightSidebar({
                 onClick={() => setActiveTab("versionHistory")}
                 type="button"
               >
-                Version History
+                <span className="sm:hidden">History</span>
+                <span className="hidden sm:inline">Version History</span>
               </button>
               {editingContext && (
                 <button
                   className={[
-                    "relative z-10 flex-1 whitespace-nowrap rounded-full px-2 py-1.5 text-[0.7rem] font-semibold tracking-wide transition-colors duration-300",
+                    "relative z-10 flex-1 whitespace-nowrap rounded-xl sm:rounded-full px-1 sm:px-2 py-1.5 text-[0.65rem] sm:text-[0.7rem] font-semibold tracking-normal sm:tracking-wide transition-colors duration-300",
                     activeTab === "editLyrics"
                       ? "text-[var(--button-primary-text)]"
                       : "text-[var(--text-muted)] hover:text-[var(--text-primary)]",
@@ -160,7 +162,8 @@ export function RightSidebar({
                   onClick={() => setActiveTab("editLyrics")}
                   type="button"
                 >
-                  Edit Lyrics
+                  <span className="sm:hidden">Edit</span>
+                  <span className="hidden sm:inline">Edit Lyrics</span>
                 </button>
               )}
             </nav>
