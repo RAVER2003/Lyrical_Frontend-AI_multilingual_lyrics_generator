@@ -69,13 +69,13 @@ export function LeftSidebar({
           >
             <div className="mb-4 flex items-center justify-between gap-3">
               <p className="truncate text-sm font-medium uppercase tracking-[0.24em] text-[var(--text-muted)]">
-                Your chats
+                Workspaces
               </p>
               <button
                 className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-secondary)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
                 onClick={onToggle}
                 type="button"
-                title="Close chats"
+                title="Close workspaces"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -87,7 +87,7 @@ export function LeftSidebar({
               type="button"
             >
               <PencilLine className="h-4 w-4" />
-              <span>New chat</span>
+              <span>New workspace</span>
             </button>
 
 
@@ -144,7 +144,7 @@ export function LeftSidebar({
               className="flex h-9 w-9 items-center justify-center rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-raised)] text-[var(--text-secondary)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
               onClick={onToggle}
               type="button"
-              title="Open chats"
+              title="Open workspaces"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -154,7 +154,7 @@ export function LeftSidebar({
                 className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--surface-soft)] text-[var(--text-secondary)] transition hover:bg-[var(--surface-muted)] hover:text-[var(--text-primary)]"
                 onClick={onNewChat}
                 type="button"
-                title="New chat"
+                title="New workspace"
               >
                 <PencilLine className="h-4 w-4" />
               </button>

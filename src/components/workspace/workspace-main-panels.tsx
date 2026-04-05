@@ -285,12 +285,10 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                   <p className="text-2xl font-semibold">
                     {isTranslating
                       ? "Translating lyrics..."
-                      : "Waiting for model output."}
+                      : "Ready for Translation"}
                   </p>
                   <p className="mt-3 max-w-md text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
-                    Write lyrics on the left and run the translation. The
-                    returned output appears here gradually, and the preview
-                    follows the latest text unless you scroll away.
+                    Enter your original lyrics in the panel on the left and click 'Translate lyrics'. The translated output will stream here progressively, allowing you to review the results in real-time.
                   </p>
                 </div>
               )}
