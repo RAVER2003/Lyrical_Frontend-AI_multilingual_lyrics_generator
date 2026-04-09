@@ -32,7 +32,7 @@ type WorkspaceMainPanelsProps = {
   rightPanelTitle: string;
   rightPanelDescription: string;
   onInputChange: (value: string) => void;
-  onGenerate: () => void;
+  onGenerate: (targetLang: string) => void;
   onClear: () => void;
   onPreviewScroll: () => void;
   onJumpToLatest: () => void;
@@ -168,7 +168,7 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
 
                     <Button
                       disabled={isBusy || !inputText.trim()}
-                      onClick={onGenerate}
+                      onClick={() => onGenerate(language)}
                       type="button"
                       size="sm"
                       className="flex-1 sm:flex-none h-9 sm:h-10 px-3 sm:px-4 text-xs sm:text-sm"

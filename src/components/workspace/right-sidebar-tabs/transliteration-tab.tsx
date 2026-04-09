@@ -70,12 +70,6 @@ export function TransliterationTab({
         </div>
       </div>
       
-      <div className="flex flex-1 flex-col gap-2 min-h-0">
-        <label className="text-xs sm:text-sm font-medium text-[var(--text-primary)]">Area for transliteration</label>
-        <div className="flex flex-1 items-center justify-center rounded-[12px] sm:rounded-[16px] border border-dashed border-[var(--border-strong)] bg-[var(--surface-soft)] p-3 sm:p-4 text-xs sm:text-sm text-[var(--text-muted)] overflow-y-auto">
-          Transliteration Preview Area
-        </div>
-      </div>
 
       <Button 
         className="mt-auto h-auto w-full shrink-0 rounded-xl py-3 sm:py-4 text-[0.8rem] sm:text-[0.85rem] font-medium tracking-wide"

@@ -1,5 +1,4 @@
-import { ChevronLeft, ChevronRight, PencilLine, Moon, SunMedium, LogOut } from "lucide-react";
-import { useTheme } from "@/components/theme/theme-provider";
+import { ChevronLeft, ChevronRight, PencilLine, LogOut } from "lucide-react";
 import { useAuth } from "@/components/auth/auth-provider";
 
 import type {
@@ -36,7 +35,6 @@ export function LeftSidebar({
   onCollapsedSelectChat,
   onNewChat,
 }: LeftSidebarProps) {
-  const { theme, toggleTheme } = useTheme();
   const { logout } = useAuth();
   
   const asideClassName = overlay
@@ -112,14 +110,7 @@ export function LeftSidebar({
             </div>
 
             <div className="mt-3 sm:mt-4 flex items-center justify-between border-t border-[var(--border-subtle)] pt-3 sm:pt-4 px-1">
-              <button
-                onClick={toggleTheme}
-                className="flex items-center gap-2 rounded-xl text-xs sm:text-sm font-medium text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
-                type="button"
-              >
-                {theme === "light" ? <Moon className="h-3 w-3 sm:h-4 sm:w-4" /> : <SunMedium className="h-3 w-3 sm:h-4 sm:w-4" />}
-                <span>{theme === "light" ? "Dark Mode" : "Light Mode"}</span>
-              </button>
+
               <button
                 onClick={logout}
                 className="flex items-center gap-2 rounded-xl text-xs sm:text-sm font-medium text-[var(--text-secondary)] transition hover:text-rose-500"

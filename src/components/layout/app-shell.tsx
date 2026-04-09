@@ -93,11 +93,7 @@ export function AppShell() {
 
         <Outlet />
         
-        {!isAuthenticated && !isWorkspaceRoute && (
-          <div className="mt-8 flex justify-center pb-8 sm:hidden">
-            <ThemeToggle />
-          </div>
-        )}
+        
       </div>
 
       {isAboutOpen && (

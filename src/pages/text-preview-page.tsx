@@ -15,7 +15,7 @@ import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
 
 import type { ChatRecord, LeftSidebarMode, EditingContext } from "@/components/workspace/types";
 import { countWords, formatTextToLines, rightPanelCopy } from "@/lib/text-preview";
-import { translateLyrics } from "@/services/lyrics/translate-lyrics";
+import { translateLyrics, streamTranslateLyrics, transliterateLyrics, editLyrics } from "@/services/lyrics/translate-lyrics";
 
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { useAutoScroll } from "@/hooks/use-auto-scroll";
@@ -26,7 +26,7 @@ export function TextPreviewPage() {
   const { theme, toggleTheme } = useTheme();
   const { chatId } = useParams<{ chatId: string }>();
   const navigate = useNavigate();
-  const { chats, versionsByChat, updateChat, createNewChat, pushVersion, clearVersions } = useChats();
+  const { chats, versionsByChat, updateChat, createNewChat, fetchVersions, clearVersions } = useChats();
   
   const isLargeScreen = useMediaQuery("(min-width: 1280px)");
   
@@ -68,21 +68,31 @@ export function TextPreviewPage() {
 
   const versions = chatId ? (versionsByChat[chatId] || []) : [];
 
-  // Rehydrate state when URL changes entirely
+  const lastLoadedChatId = useRef<string | null>(null);
+
   useEffect(() => {
-    if (activeChat) {
-      setInputText(activeChat.input || "");
-      const rLines = formatTextToLines(activeChat.output || "");
-      setRenderedLines(rLines);
-      resetCount(rLines.length);
-      setTransliteratedLines([]);
+    if (chatId) {
+      fetchVersions(chatId);
     } else {
+      lastLoadedChatId.current = null;
       setInputText("");
       setRenderedLines([]);
       resetCount(0);
       setTransliteratedLines([]);
     }
-  }, [chatId, resetCount]); // Intentionally exclude activeChat to prevent rerender loops from deep updates.
+  }, [chatId]); 
+
+  // Rehydrate state when URL changes entirely or when activeChat first populates from the API
+  useEffect(() => {
+    if (activeChat && lastLoadedChatId.current !== activeChat.id) {
+      setInputText(activeChat.input || "");
+      const rLines = formatTextToLines(activeChat.output || "");
+      setRenderedLines(rLines);
+      resetCount(rLines.length);
+      setTransliteratedLines([]);
+      lastLoadedChatId.current = activeChat.id;
+    }
+  }, [activeChat, resetCount]);
 
   const visibleText = visibleLines.join("\n");
   const wordCount = useMemo(() => countWords(inputText), [inputText]);
@@ -150,7 +160,7 @@ export function TextPreviewPage() {
     });
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = (targetLang: string) => {
     const run = async () => {
       if (!inputText.trim()) return;
 
@@ -162,21 +172,29 @@ export function TextPreviewPage() {
       setShouldAutoFollow(true);
 
       try {
-        const translatedText = await translateLyrics({ input: inputText });
-        const translatedLines = formatTextToLines(translatedText);
+        let fullOutput = "";
+        await streamTranslateLyrics(
+          { workspaceId: chatId!, input: inputText, targetDialect: targetLang },
+          (line) => {
+            setRenderedLines((prev) => {
+              const next = [...prev, line];
+              fullOutput = next.join("\n");
+              return next;
+            });
+            startAnimation();
+          }
+        );
 
-        setRenderedLines(translatedLines);
-        
-        // If this is a completely fresh chat, rename it using the first three words!
         if (activeChat && activeChat.title === "New Translation") {
           const freshTitle = inputText.split(" ").slice(0, 3).join(" ") || "New Translation";
-          updateChat(chatId!, { title: freshTitle, input: inputText, output: translatedText });
+          updateChat(chatId!, { title: freshTitle, input: inputText, output: fullOutput });
+        } else {
+          updateChat(chatId!, { input: inputText, output: fullOutput });
         }
         
-        pushVersion(chatId!, { id: `v_${Date.now()}`, label: `Translation output (${translatedLines.length} lines)`, timestamp: Date.now() });
-        setShouldAutoFollow(true);
-        startAnimation();
-      } catch {
+        await fetchVersions(chatId!);
+      } catch (e) {
+        console.error(e);
         toast.error("Translation could not be completed.");
       } finally {
         setIsTranslating(false);
@@ -195,79 +213,78 @@ export function TextPreviewPage() {
     setIsRightOpen(false);
   };
 
-  const handleConfirmEdit = (newWord: string) => {
+  const handleConfirmEdit = async (newWord: string) => {
     if (!editingContext) return;
     
     setIsTranslating(true);
     stopAnimation();
-    setEditingContext(null);
-    setIsRightOpen(false);
     
-    // Simulate backend call
-    setTimeout(() => {
-      pushVersion(chatId!, { id: `v_${Date.now()}`, label: `Edited word: "${newWord}"`, timestamp: Date.now() });
+    try {
+      const fullNewOutput = await editLyrics(chatId!, newWord, { 
+        lineIndex: editingContext.lineIndex,
+        wordIndex: editingContext.wordIndex
+      }, "Improve word");
+      
+      await fetchVersions(chatId!);
       setTransliteratedLines([]);
 
-      setRenderedLines((currentLines) => {
-         const nextLines = [...currentLines];
-         const lineToEdit = nextLines[editingContext.lineIndex];
-         if (lineToEdit !== undefined) {
-           const words = lineToEdit.split(" ");
-           words[editingContext.wordIndex] = newWord;
-           nextLines[editingContext.lineIndex] = words.filter(Boolean).join(" ");
-         }
-         return nextLines;
-      });
+      const nextLines = formatTextToLines(fullNewOutput);
+      setRenderedLines(nextLines);
       
+      updateChat(chatId!, { output: fullNewOutput });
       resetCount(0);
-      setIsTranslating(false);
       setShouldAutoFollow(true);
       startAnimation();
-    }, 1200);
+    } catch (e) {
+      toast.error("Edit failed");
+    } finally {
+      setEditingContext(null);
+      setIsRightOpen(false);
+      setIsTranslating(false);
+    }
   };
 
-  const handleTransliterate = (language: string) => {
+  const handleTransliterate = async (language: string) => {
     if (visibleLines.length === 0) return;
-    
     setIsTransliterating(true);
-    
-    // Simulate API delay
-    setTimeout(() => {
-      const mockOutput = visibleLines.map(line => {
-        if (!line) return "";
-        return line.split(" ").map(w => w.toLowerCase()).join(" ") + (language==='marathi' ? " ||" : " ~");
-      });
-      setTransliteratedLines(mockOutput);
+    try {
+      const translation = visibleLines.join("\n");
+      const output = await transliterateLyrics(chatId!, translation, language);
+      setTransliteratedLines(output);
+    } catch {
+      toast.error("Transliteration failed");
+    } finally {
       setIsTransliterating(false);
-    }, 1000);
+    }
   };
 
   const handleSelectVersion = (id: string) => {
-    setIsFetchingVersion(true);
+    const version = versions.find((v: any) => v.id === id);
+    if (!version) return;
     
-    // Demux mock payload based directly backwards towards target
-    setTimeout(() => {
-      setInputText(`Mock recovered source input specifically tracing state towards ${id}`);
-      const restoredLines = formatTextToLines(`Mocked historical translation restored for ${id}.\nLinear history synced successfully.\nLines precisely matching historical state.`);
-      
-      setRenderedLines(restoredLines);
-      setTransliteratedLines([]);
-      resetCount(restoredLines.length);
-      stopAnimation();
-      setShouldAutoFollow(false);
-      
-      setIsFetchingVersion(false);
-      setIsRightOpen(false);
-    }, 850);
+    setIsFetchingVersion(true);
+    setInputText(version.input_state || "");
+    const restoredLines = formatTextToLines(version.output_state || "");
+    
+    setRenderedLines(restoredLines);
+    setTransliteratedLines([]);
+    resetCount(restoredLines.length);
+    stopAnimation();
+    setShouldAutoFollow(false);
+    setIsFetchingVersion(false);
+    setIsRightOpen(false);
+    
+    updateChat(chatId!, { input: version.input_state || "", output: version.output_state || "" });
   };
 
-  const handleDeleteHistory = () => {
+  const handleDeleteHistory = async () => {
     setIsDeletingHistory(true);
-    setTimeout(() => {
-      clearVersions(chatId!);
-      setIsDeletingHistory(false);
+    try {
+      await clearVersions(chatId!);
       toast.success("Version history deleted completely.");
-    }, 1000);
+    } finally {
+      setIsDeletingHistory(false);
+    }
   };
 
   const handleCopy = async () => {
@@ -324,10 +341,10 @@ export function TextPreviewPage() {
             onOpenWithMode={openLeftSidebar}
             onSelectChat={handleChatSelect}
             onToggle={toggleLeftSidebar}
-            onNewChat={() => {
-              const id = createNewChat();
-              navigate(`/home/${id}`);
-            }}
+                 onNewChat={async () => {
+                   const id = await createNewChat();
+                   navigate(`/home/${id}`);
+                 }} 
             overlay={!isLargeScreen}
             railWidth={railWidth}
           />
@@ -337,8 +354,8 @@ export function TextPreviewPage() {
             {!chatId || !activeChat ? (
               <HomeWelcome 
                  userName={user?.name || "Creator"} 
-                 onNewChat={() => {
-                   const id = createNewChat();
+                 onNewChat={async () => {
+                   const id = await createNewChat();
                    navigate(`/home/${id}`);
                  }} 
               />

@@ -23,4 +23,6 @@ export type VersionMetadata = {
   id: string;
   label: string;
   timestamp: number;
+  input_state?: string;
+  output_state?: string;
 };
