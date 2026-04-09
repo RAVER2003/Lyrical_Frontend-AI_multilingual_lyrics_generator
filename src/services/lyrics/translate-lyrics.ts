@@ -61,6 +61,34 @@ export async function translateLyrics({ workspaceId, input, targetDialect }: Tra
   return response.data.output;
 }
 
+export type GenerateRhymeParams = {
+  workspaceId: string;
+  lines: string[];
+  genre: string;
+  rhymeScheme: string;
+}
+
+export async function generateRhymedVerse({ workspaceId, lines, genre, rhymeScheme }: GenerateRhymeParams) {
+  // Ensure token is fresh
+  if (keycloak.token) {
+    await keycloak.updateToken(30);
+  }
+
+  const response = await fetch('http://localhost:8000/api/services/generate-rhyme', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${keycloak.token}`
+    },
+    body: JSON.stringify({ workspaceId, lines, genre, rhymeScheme })
+  });
+
+  if (!response.ok) throw new Error('Rhyme generation failed');
+
+  const data = await response.json();
+  return data.rhymedLines as string[];
+}
+
 export async function transliterateLyrics(workspaceId: string, text: string, targetDialect: string = "phonetic") {
   const response = await apiClient.post('/services/transliterate', {
     workspaceId,

@@ -39,6 +39,17 @@ type WorkspaceMainPanelsProps = {
   onCopy: () => void;
   onDownload: () => void;
   onWordClick: (ctx: EditingContext) => void;
+  activeOutputTab?: "flat" | "rhyme";
+  onTabChange?: (tab: "flat" | "rhyme") => void;
+  rhymedLines?: string[];
+  isGeneratingRhyme?: boolean;
+  selectedGenre?: string;
+  onGenreChange?: (genre: string) => void;
+  selectedRhymeScheme?: string;
+  onRhymeSchemeChange?: (scheme: string) => void;
+  onGenerateRhyme?: () => void;
+  onTransliterate?: (lang: string) => void;
+  isTransliterating?: boolean;
 };
 
 export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
@@ -69,6 +80,17 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
     onCopy,
     onDownload,
     onWordClick,
+    activeOutputTab = "flat",
+    onTabChange,
+    rhymedLines = [],
+    isGeneratingRhyme = false,
+    selectedGenre = "party",
+    onGenreChange,
+    selectedRhymeScheme = "AABB",
+    onRhymeSchemeChange,
+    onGenerateRhyme,
+    onTransliterate,
+    isTransliterating = false,
   } = props;
 
   return (
@@ -186,25 +208,100 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
         </Card>
 
         <Card className="flex h-full min-h-0 w-full max-w-[38rem] flex-col xl:justify-self-center">
-          <CardHeader className="flex-row items-start justify-between gap-4 space-y-0 p-4 sm:p-6 pb-2 sm:pb-6">
-            <div className="max-w-xl space-y-1 sm:space-y-2">
-              <p className="text-xs sm:text-sm font-medium text-[var(--text-muted)]">
-                {rightPanelEyebrow}
-              </p>
-              <CardTitle className="text-lg sm:text-xl">{rightPanelTitle}</CardTitle>
-              <CardDescription className="text-xs sm:text-sm">{rightPanelDescription}</CardDescription>
+          <CardHeader className="flex-row items-center justify-between gap-4 space-y-0 p-4 sm:p-6 pb-2 sm:pb-6 border-b border-[var(--border-subtle)]">
+            <div className="flex gap-4">
+              <button
+                className={`text-sm font-medium transition-colors pb-1 border-b-2 ${activeOutputTab === "flat" ? "border-[var(--accent-strong)] text-[var(--text-primary)]" : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+                onClick={() => onTabChange?.("flat")}
+              >
+                Literal Translation
+              </button>
+              <button
+                className={`text-sm font-medium transition-colors pb-1 border-b-2 ${activeOutputTab === "rhyme" ? "border-[var(--accent-strong)] text-[var(--text-primary)]" : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"}`}
+                onClick={() => onTabChange?.("rhyme")}
+              >
+                Poetic Match
+              </button>
             </div>
-
             <Badge variant="secondary" className="shrink-0 text-[0.65rem] sm:text-xs">Model output</Badge>
           </CardHeader>
 
-          <CardContent className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 pt-0 sm:pt-0">
+          <CardContent className="flex min-h-0 flex-1 flex-col p-4 sm:p-6 pt-4 sm:pt-6">
             <div
               ref={previewScrollRef}
               onScroll={onPreviewScroll}
               className={`panel-scroll overflow-y-auto rounded-[20px] sm:rounded-[24px] border border-[var(--border-subtle)] bg-[var(--surface-soft)] p-4 sm:p-5 ${panelHeightClass}`}
             >
-              {isWaitingResponse ? (
+              {activeOutputTab === "rhyme" ? (
+                // --- RHYME TAB UI ---
+                language !== "hindi" ? (
+                  <div className="flex h-full min-h-full flex-col items-center justify-center rounded-[20px] border border-dashed border-[var(--border-subtle)] px-6 text-center">
+                    <p className="text-xl font-semibold">Hindi Required</p>
+                    <p className="mt-3 max-w-sm text-sm leading-7 text-[var(--text-secondary)]">
+                      The Poetic Match generator currently only supports Hindi translations. Please select Hindi as your target language in the left panel.
+                    </p>
+                  </div>
+                ) : isGeneratingRhyme ? (
+                  <div className="flex h-full min-h-full flex-col justify-center rounded-[20px] border border-dashed border-[var(--border-subtle)] px-6">
+                    <div className="mx-auto w-full max-w-lg space-y-4">
+                      <div className="flex items-center justify-center">
+                        <Badge variant="secondary">Running verse generator model</Badge>
+                      </div>
+                      <p className="text-center text-2xl font-semibold">Crafting rhyming verses...</p>
+                      <p className="text-center text-sm leading-7 text-[var(--text-secondary)] sm:text-base">
+                        This model processes the entire translation at once to ensure phonetic flow. Please wait a moment.
+                      </p>
+                      <div className="space-y-3 pt-2 w-full flex flex-col items-center">
+                         <span className="flex h-8 w-8 animate-spin items-center justify-center rounded-full border-4 border-[var(--surface-muted)] border-t-[var(--accent-strong)]"></span>
+                      </div>
+                    </div>
+                  </div>
+                ) : rhymedLines.length > 0 ? (
+                  <div className="space-y-3">
+                    {rhymedLines.map((line, index) =>
+                      line ? (
+                        <div key={`rhyme-${index}`} className="animate-[fadeInUp_0.45s_ease-out]">
+                          <p className="text-base leading-8 text-[var(--text-primary)] sm:text-[1.05rem]">
+                            {line}
+                          </p>
+                        </div>
+                      ) : (
+                        <div key={`rhymebreak-${index}`} className="h-3" />
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex h-full min-h-full flex-col items-center justify-center rounded-[20px] border border-dashed border-[var(--border-subtle)] px-4 text-center">
+                    <p className="text-2xl font-semibold mb-4">Poetic Match</p>
+                    <p className="text-sm text-[var(--text-secondary)] mb-6 max-w-sm">
+                      Select your desired genre, then convert your literal Hindi translation into rhythmic poetry.
+                    </p>
+                    <div className="flex flex-col gap-4 w-full max-w-xs">
+                      <div>
+                        <label className="text-xs font-semibold text-[var(--text-muted)] text-left block mb-1">Genre</label>
+                        <select 
+                          value={selectedGenre} 
+                          onChange={(e) => onGenreChange?.(e.target.value)}
+                          className="w-full h-10 px-3 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-raised)] text-sm text-[var(--text-primary)] outline-none"
+                        >
+                          <option value="party">Party</option>
+                          <option value="devotional">Devotional</option>
+                          <option value="romantic">Romantic</option>
+                          <option value="sad">Sad</option>
+                          <option value="happy">Happy</option>
+                        </select>
+                      </div>
+                      <Button onClick={onGenerateRhyme} className="w-full mt-2" disabled={visibleLines.length === 0}>
+                        Generate Rhyme
+                      </Button>
+                      {visibleLines.length === 0 && (
+                        <p className="text-xs text-red-500 mt-1">Translate some lyrics first.</p>
+                      )}
+                    </div>
+                  </div>
+                )
+              ) : isWaitingResponse ? (
+                // --- FLAT TRANSLATION UI ---
                 <div className="flex h-full min-h-full flex-col justify-center rounded-[20px] border border-dashed border-[var(--border-subtle)] px-6">
                   <div className="mx-auto w-full max-w-lg space-y-4">
                     <div className="flex items-center justify-center">
@@ -301,26 +398,32 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
               <div className="flex flex-col gap-3 rounded-xl sm:rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-muted)] px-3 py-3 sm:px-4 text-xs sm:text-sm text-[var(--text-secondary)]">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <span>
-                    {isWaitingResponse
-                      ? "Waiting for translation model response"
-                      : visibleLines.length > 0
-                        ? `${visibleLines.length} lines currently visible`
-                        : "No preview generated yet"}
+                    {activeOutputTab === "rhyme"
+                      ? isGeneratingRhyme 
+                        ? "Waiting for verse model" 
+                        : rhymedLines.length > 0 ? `${rhymedLines.length} rhymed lines` : "No rhymes generated"
+                      : isWaitingResponse
+                        ? "Waiting for translation model response"
+                        : visibleLines.length > 0
+                          ? `${visibleLines.length} lines currently visible`
+                          : "No preview generated yet"}
                   </span>
 
-                  <div className="flex flex-wrap items-center gap-2">
-                    {showJumpToLatest && (
-                      <Button
-                        disabled={isBusy}
-                        onClick={onJumpToLatest}
-                        size="sm"
-                        type="button"
-                        variant="secondary"
-                      >
-                        Jump to latest
-                      </Button>
-                    )}
-                  </div>
+                  {activeOutputTab === "flat" && (
+                    <div className="flex flex-wrap items-center gap-2">
+                      {showJumpToLatest && (
+                        <Button
+                          disabled={isBusy}
+                          onClick={onJumpToLatest}
+                          size="sm"
+                          type="button"
+                          variant="secondary"
+                        >
+                          Jump to latest
+                        </Button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
@@ -342,6 +445,17 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                     <ArrowDownToLine className="h-4 w-4" />
                     <span>Download .txt</span>
                   </Button>
+                  {activeOutputTab === "flat" && language !== "english" && (
+                    <Button
+                      disabled={isBusy || !visibleText.trim() || isTransliterating}
+                      onClick={() => onTransliterate?.(language)}
+                      type="button"
+                      variant={transliteratedLines.length > 0 ? "secondary" : "outline"}
+                      className="border-[var(--accent-soft)] text-[var(--accent-strong)] hover:bg-[var(--accent-soft)]"
+                    >
+                      <span>{isTransliterating ? "Processing..." : transliteratedLines.length > 0 ? "Refresh Phonetics" : "Show Phonetics"}</span>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>

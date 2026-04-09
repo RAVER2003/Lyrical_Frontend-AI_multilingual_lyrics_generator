@@ -15,7 +15,7 @@ import { WorkspaceLayout } from "@/components/workspace/workspace-layout";
 
 import type { ChatRecord, LeftSidebarMode, EditingContext } from "@/components/workspace/types";
 import { countWords, formatTextToLines, rightPanelCopy } from "@/lib/text-preview";
-import { translateLyrics, streamTranslateLyrics, transliterateLyrics, editLyrics } from "@/services/lyrics/translate-lyrics";
+import { translateLyrics, streamTranslateLyrics, transliterateLyrics, editLyrics, generateRhymedVerse } from "@/services/lyrics/translate-lyrics";
 
 import { useTypewriter } from "@/hooks/use-typewriter";
 import { useAutoScroll } from "@/hooks/use-auto-scroll";
@@ -48,6 +48,12 @@ export function TextPreviewPage() {
   const [isFetchingVersion, setIsFetchingVersion] = useState(false);
   const [isDeletingHistory, setIsDeletingHistory] = useState(false);
   
+  const [activeOutputTab, setActiveOutputTab] = useState<"flat" | "rhyme">("flat");
+  const [rhymedLines, setRhymedLines] = useState<string[]>([]);
+  const [isGeneratingRhyme, setIsGeneratingRhyme] = useState(false);
+  const [selectedGenre, setSelectedGenre] = useState("party");
+  const [selectedRhymeScheme, setSelectedRhymeScheme] = useState("AABB");
+  
   const previewScrollRef = useRef<HTMLDivElement | null>(null);
   
   const { 
@@ -79,6 +85,8 @@ export function TextPreviewPage() {
       setRenderedLines([]);
       resetCount(0);
       setTransliteratedLines([]);
+      setActiveOutputTab("flat");
+      setRhymedLines([]);
     }
   }, [chatId]); 
 
@@ -90,6 +98,8 @@ export function TextPreviewPage() {
       setRenderedLines(rLines);
       resetCount(rLines.length);
       setTransliteratedLines([]);
+      setActiveOutputTab("flat");
+      setRhymedLines([]);
       lastLoadedChatId.current = activeChat.id;
     }
   }, [activeChat, resetCount]);
@@ -166,6 +176,8 @@ export function TextPreviewPage() {
 
       setRenderedLines([]);
       setTransliteratedLines([]);
+      setActiveOutputTab("flat");
+      setRhymedLines([]);
       resetCount(0);
       stopAnimation();
       setIsTranslating(true);
@@ -258,6 +270,27 @@ export function TextPreviewPage() {
     }
   };
 
+  const handleGenerateRhyme = async () => {
+    if (visibleLines.length === 0) return;
+    setIsGeneratingRhyme(true);
+    try {
+      // The backend will create a version internally
+      const result = await generateRhymedVerse({
+        workspaceId: chatId!,
+        lines: visibleLines,
+        genre: selectedGenre,
+        rhymeScheme: selectedRhymeScheme
+      });
+      setRhymedLines(result);
+      // Wait for backend to finish adding the version before fetching
+      await fetchVersions(chatId!);
+    } catch {
+      toast.error("Failed to generate rhymes.");
+    } finally {
+      setIsGeneratingRhyme(false);
+    }
+  };
+
   const handleSelectVersion = (id: string) => {
     const version = versions.find((v: any) => v.id === id);
     if (!version) return;
@@ -268,6 +301,8 @@ export function TextPreviewPage() {
     
     setRenderedLines(restoredLines);
     setTransliteratedLines([]);
+    setActiveOutputTab("flat");
+    setRhymedLines([]);
     resetCount(restoredLines.length);
     stopAnimation();
     setShouldAutoFollow(false);
@@ -384,6 +419,17 @@ export function TextPreviewPage() {
                 visibleText={visibleText}
                 wordCount={wordCount}
                 onWordClick={handleInitiateEdit}
+                activeOutputTab={activeOutputTab}
+                onTabChange={setActiveOutputTab}
+                rhymedLines={rhymedLines}
+                isGeneratingRhyme={isGeneratingRhyme}
+                selectedGenre={selectedGenre}
+                onGenreChange={setSelectedGenre}
+                selectedRhymeScheme={selectedRhymeScheme}
+                onRhymeSchemeChange={setSelectedRhymeScheme}
+                onGenerateRhyme={handleGenerateRhyme}
+                onTransliterate={handleTransliterate}
+                isTransliterating={isTransliterating}
               />
             )}
           </div>
