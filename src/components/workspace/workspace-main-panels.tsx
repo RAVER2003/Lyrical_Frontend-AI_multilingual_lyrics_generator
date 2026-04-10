@@ -53,7 +53,7 @@ type WorkspaceMainPanelsProps = {
 };
 
 export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
-  const [language, setLanguage] = useState("english");
+  const [language, setLanguage] = useState("hindi");
   const [isLangOpen, setIsLangOpen] = useState(false);
 
   const {
@@ -150,7 +150,7 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                         type="button"
                       >
                         <span className="truncate mr-2">
-                          {language === "english" ? "English" : language === "marathi" ? "Marathi" : "Hindi"}
+                          {language === "marathi" ? "Marathi" : "Hindi"}
                         </span>
                         <ChevronDown className={`h-3 w-3 sm:h-4 sm:w-4 shrink-0 px-0 transition-transform ${isLangOpen ? "rotate-180" : ""}`} />
                       </button>
@@ -163,7 +163,6 @@ export function WorkspaceMainPanels(props: WorkspaceMainPanelsProps) {
                           />
                           <div className="absolute z-[90] bottom-full mb-2 w-full flex flex-col gap-1 rounded-xl border border-[var(--border-strong)] bg-[color-mix(in_oklab,var(--surface-raised)_95%,white)] p-1.5 shadow-lg backdrop-blur-md dark:bg-[color-mix(in_oklab,var(--surface-raised)_95%,black)]">
                             {[
-                              { id: "english", label: "English" },
                               { id: "marathi", label: "Marathi" },
                               { id: "hindi", label: "Hindi" },
                             ].map((opt) => (
